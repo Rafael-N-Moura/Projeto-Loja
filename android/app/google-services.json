@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "28377793026",
+    "project_id": "budega-online",
+    "storage_bucket": "budega-online.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:28377793026:android:61b722cfb4c25a44051d1b",
+        "android_client_info": {
+          "package_name": "br.com.rnmoura.projeto_budega"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "28377793026-1cp75dhj7jd2e9lot55q392isu1d2bkn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB13xf7A8o3YN_nTXeHVtBXmsT8A0ZGUFA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "28377793026-1cp75dhj7jd2e9lot55q392isu1d2bkn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
