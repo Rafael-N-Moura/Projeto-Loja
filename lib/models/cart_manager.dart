@@ -82,6 +82,14 @@ class CartManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clear() {
+    for (final cartProduct in items) {
+      user.cartReference.doc(cartProduct.id).delete();
+    }
+    items.clear();
+    notifyListeners();
+  }
+
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<void> _loadUserAddress() async {

@@ -13,15 +13,18 @@ class Product extends ChangeNotifier {
     stock = document['stock'] as int;
     price = document['price'] as num;
     images = List<String>.from(document.data()['images'] as List<dynamic>);
+    deleted = (document.data()['deleted'] ?? false) as bool;
   }
 
-  Product(
-      {this.id,
-      this.name,
-      this.description,
-      this.images,
-      this.price,
-      this.stock}) {
+  Product({
+    this.id,
+    this.name,
+    this.description,
+    this.images,
+    this.price,
+    this.stock,
+    this.deleted = false,
+  }) {
     images = images ?? [];
     price = price ?? 0;
     stock = stock ?? 0;
@@ -44,6 +47,7 @@ class Product extends ChangeNotifier {
   num price;
   int stock;
   List<String> images;
+  bool deleted;
 
   List<dynamic> newImages;
 
@@ -63,6 +67,10 @@ class Product extends ChangeNotifier {
 
   final List<String> updateImages = [];
 
+  void delete() {
+    firestoreRef.update({'deleted': true});
+  }
+
   Future<void> save() async {
     loading = true;
     final Map<String, dynamic> data = {
@@ -70,6 +78,7 @@ class Product extends ChangeNotifier {
       'description': description,
       'price': price,
       'stock': stock,
+      'deleted': deleted
     };
 
     if (id == null) {
@@ -95,7 +104,7 @@ class Product extends ChangeNotifier {
     }
 
     for (final image in images) {
-      if (!newImages.contains(image)) {
+      if (!newImages.contains(image) && image.contains('firebase')) {
         try {
           final ref = storage.refFromURL(image);
           await ref.delete();
@@ -117,7 +126,7 @@ class Product extends ChangeNotifier {
   }
 
   bool get hasStock {
-    return stock > 0;
+    return stock > 0 && !deleted;
     notifyListeners();
   }
 }

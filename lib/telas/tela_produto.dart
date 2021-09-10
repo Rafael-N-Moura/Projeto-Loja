@@ -23,7 +23,7 @@ class ProductScreen extends StatelessWidget {
           actions: <Widget>[
             Consumer<UserManager>(
               builder: (_, userManager, __) {
-                if (userManager.adminEnabled) {
+                if (userManager.adminEnabled && !product.deleted) {
                   return IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {

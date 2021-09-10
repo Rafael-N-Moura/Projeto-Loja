@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:projeto_budega/models/admin_orders_manager.dart';
 import 'package:projeto_budega/models/admin_users_manager.dart';
 import 'package:projeto_budega/models/cart_manager.dart';
 import 'package:projeto_budega/models/home_manager.dart';
+import 'package:projeto_budega/models/order.dart';
+import 'package:projeto_budega/models/orders_manager.dart';
 import 'package:projeto_budega/models/page_manager.dart';
 import 'package:projeto_budega/models/product.dart';
 import 'package:projeto_budega/models/product_manager.dart';
@@ -13,6 +16,7 @@ import 'package:projeto_budega/telas/tela_base.dart';
 import 'package:projeto_budega/telas/tela_cadastro.dart';
 import 'package:projeto_budega/telas/tela_cart.dart';
 import 'package:projeto_budega/telas/tela_checkout.dart';
+import 'package:projeto_budega/telas/tela_confirmacao.dart';
 import 'package:projeto_budega/telas/tela_editar_produto.dart';
 import 'package:projeto_budega/telas/tela_endereco.dart';
 import 'package:projeto_budega/telas/tela_login.dart';
@@ -85,19 +89,31 @@ class _AppState extends State<App> {
           update: (_, userManager, cartManager) =>
               cartManager..updateUser(userManager),
         ),
+        ChangeNotifierProxyProvider<UserManager, OrdersManager>(
+          create: (_) => OrdersManager(),
+          lazy: false,
+          update: (_, userManager, ordersManager) =>
+              ordersManager..updateUser(userManager.user),
+        ),
         ChangeNotifierProxyProvider<UserManager, AdminUsersManager>(
           create: (_) => AdminUsersManager(),
           lazy: false,
           update: (_, userManager, adminUsersManager) =>
               adminUsersManager..updateUser(userManager),
         ),
+        ChangeNotifierProxyProvider<UserManager, AdminOrdersManager>(
+          create: (_) => AdminOrdersManager(),
+          lazy: false,
+          update: (_, userManager, adminOrdersManager) => adminOrdersManager
+            ..updateAdmin(adminEnabled: userManager.adminEnabled),
+        )
       ],
       child: MaterialApp(
         //aqui inves de ter um metodo proprio vc coloca um widget acima
         title: 'Budega',
         onGenerateRoute: (settings) {
           switch (settings.name) {
-            case '/base':
+            case '/':
               return MaterialPageRoute(
                 builder: (_) => TelaBase(),
               );
@@ -107,14 +123,17 @@ class _AppState extends State<App> {
               );
             case '/cart':
               return MaterialPageRoute(
-                builder: (_) => TelaCart(),
-              );
+                  builder: (_) => TelaCart(), settings: settings);
             case '/checkout':
               return MaterialPageRoute(builder: (_) => TelaCheckout());
             case '/login':
               return MaterialPageRoute(
                 builder: (_) => TelaLogin(),
               );
+            case '/confirmation':
+              return MaterialPageRoute(
+                  builder: (_) =>
+                      ConfirmationScreen(settings.arguments as Order));
             case '/edit_product':
               return MaterialPageRoute(
                 builder: (_) =>
@@ -131,11 +150,9 @@ class _AppState extends State<App> {
                   builder: (_) => ProductScreen(settings.arguments as Product));
             default:
               return MaterialPageRoute(
-                builder: (_) => TelaBase(),
-              );
+                  builder: (_) => TelaBase(), settings: settings);
           }
         },
-        initialRoute: '/base',
         theme: ThemeData(
           primaryColor: Color.fromARGB(255, 4, 125, 141),
           visualDensity: VisualDensity.adaptivePlatformDensity,

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:projeto_budega/helpers/firebase_erros.dart';
 import 'package:projeto_budega/models/appuser.dart';
 
@@ -92,6 +93,48 @@ class UserManager extends ChangeNotifier {
 
       notifyListeners();
     }
+  }
+
+  bool _loadingFace = false;
+  bool get loadingFace => _loadingFace;
+  set loadingFace(bool value) {
+    _loadingFace = value;
+    notifyListeners();
+  }
+
+  Future<void> facebookLogin({Function onFail, Function onSuccess}) async {
+    loadingFace = true;
+
+    final result = await FacebookLogin().logIn(['email', 'public_profile']);
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final credential =
+            FacebookAuthProvider.credential(result.accessToken.token);
+
+        final authResult = await auth.signInWithCredential(credential);
+
+        if (authResult.user != null) {
+          final firebaseUser = authResult.user;
+
+          user = AppUser(
+              id: firebaseUser.uid,
+              name: firebaseUser.displayName,
+              email: firebaseUser.email);
+
+          await user.saveData();
+
+          onSuccess();
+        }
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        break;
+      case FacebookLoginStatus.error:
+        onFail(result.errorMessage);
+        break;
+    }
+
+    loadingFace = false;
   }
 
   bool get adminEnabled => user != null && user.admin;

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:projeto_budega/models/product.dart';
 
 class CartProduct extends ChangeNotifier {
-  CartProduct.fromProduct(this.product) {
+  CartProduct.fromProduct(this._product) {
     productId = product.id;
     quantity = 1;
     price = product.price;
@@ -18,7 +18,7 @@ class CartProduct extends ChangeNotifier {
     firestore.doc('products/$productId').get().then(
       (doc) {
         product = Product.fromDocument(doc);
-        notifyListeners();
+        //notifyListeners();
       },
     );
   }
@@ -29,14 +29,38 @@ class CartProduct extends ChangeNotifier {
   num price;
   int quantity;
   String id;
+  num fixedPrice;
 
-  Product product;
+  Product _product;
+  Product get product => _product;
+  set product(Product value) {
+    _product = value;
+    notifyListeners();
+  }
+
+  CartProduct.fromMap(Map<String, dynamic> map) {
+    productId = map['pid'] as String;
+    quantity = map['quantity'] as int;
+    fixedPrice = map['fixedPrice'] as num;
+
+    firestore.doc('products/$productId').get().then((doc) {
+      product = Product.fromDocument(doc);
+    });
+  }
 
   Map<String, dynamic> toCartItemMap() {
     return {
       'pid': productId,
       'quantity': quantity,
       'price': price,
+    };
+  }
+
+  Map<String, dynamic> toOrderItemMap() {
+    return {
+      'pid': productId,
+      'quantity': quantity,
+      'fixedPrice': fixedPrice ?? price,
     };
   }
 
@@ -57,7 +81,7 @@ class CartProduct extends ChangeNotifier {
   num get totalPrice => price * quantity;
 
   bool get hasStock {
-    if (product == null) return false;
+    if (product == null && product.deleted) return false;
     return product.stock >= quantity;
   }
 }

@@ -29,11 +29,19 @@ class ProductManager extends ChangeNotifier {
 
   List<Product> allProducts = [];
   Future<void> _loadAllProducts() async {
-    final QuerySnapshot snapProducts =
-        await firestore.collection('products').get();
+    final QuerySnapshot snapProducts = await firestore
+        .collection('products')
+        .where('deleted', isEqualTo: false)
+        .get();
     allProducts =
         snapProducts.docs.map((d) => Product.fromDocument(d)).toList();
 
+    notifyListeners();
+  }
+
+  void delete(Product product) {
+    product.delete();
+    allProducts.removeWhere((p) => p.id == product.id);
     notifyListeners();
   }
 

@@ -80,54 +80,51 @@ class TelaCadastro extends StatelessWidget {
                       onSaved: (pass) => user.confirmedPass = pass,
                     ),
                     SizedBox(height: 16),
-                    SizedBox(
-                      height: 44,
-                      child: RaisedButton(
-                        onPressed: userManager.loading
-                            ? null
-                            : () {
-                                if (formKey.currentState.validate()) {
-                                  formKey.currentState.save();
-                                  if (user.password != user.confirmedPass) {
+                    RaisedButton(
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      onPressed: userManager.loading
+                          ? null
+                          : () {
+                              if (formKey.currentState.validate()) {
+                                formKey.currentState.save();
+                                if (user.password != user.confirmedPass) {
+                                  scaffoldKey.currentState
+                                      .showSnackBar(SnackBar(
+                                    content: Text(
+                                      'As senhas não são igauis',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    backgroundColor: Colors.red,
+                                  ));
+                                }
+                                print(user.name);
+                                userManager.signUp(
+                                  user: user,
+                                  onSucess: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  onFail: (e) {
                                     scaffoldKey.currentState
                                         .showSnackBar(SnackBar(
-                                      content: Text(
-                                        'As senhas não são igauis',
-                                        style: TextStyle(fontSize: 16),
-                                      ),
+                                      content: Text('Falha ao cadastrar: $e'),
                                       backgroundColor: Colors.red,
                                     ));
-                                  }
-                                  print(user.name);
-                                  userManager.signUp(
-                                    user: user,
-                                    onSucess: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    onFail: (e) {
-                                      scaffoldKey.currentState
-                                          .showSnackBar(SnackBar(
-                                        content: Text('Falha ao cadastrar: $e'),
-                                        backgroundColor: Colors.red,
-                                      ));
-                                    },
-                                  );
-                                }
-                              },
-                        color: Theme.of(context).primaryColor,
-                        disabledColor:
-                            Theme.of(context).primaryColor.withAlpha(100),
-                        textColor: Colors.white,
-                        child: userManager.loading
-                            ? CircularProgressIndicator(
-                                valueColor:
-                                    AlwaysStoppedAnimation(Colors.white),
-                              )
-                            : Text(
-                                'Criar conta',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                      ),
+                                  },
+                                );
+                              }
+                            },
+                      color: Theme.of(context).primaryColor,
+                      disabledColor:
+                          Theme.of(context).primaryColor.withAlpha(100),
+                      textColor: Colors.white,
+                      child: userManager.loading
+                          ? CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation(Colors.white),
+                            )
+                          : Text(
+                              'Criar conta',
+                              style: TextStyle(fontSize: 15),
+                            ),
                     ),
                   ],
                 );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:projeto_budega/componentes/drawer/custom_drawer.dart';
 import 'package:projeto_budega/models/page_manager.dart';
 import 'package:projeto_budega/models/user_manager.dart';
@@ -6,12 +7,26 @@ import 'package:projeto_budega/telas/tela_admin_users.dart';
 import 'package:projeto_budega/telas/tela_cadastro.dart';
 import 'package:projeto_budega/telas/tela_home.dart';
 import 'package:projeto_budega/telas/tela_login.dart';
+import 'package:projeto_budega/telas/tela_pedidos.dart';
+import 'package:projeto_budega/telas/tela_pedidos_admin.dart';
 import 'package:projeto_budega/telas/tela_produtos.dart';
 import 'package:provider/provider.dart';
 
-class TelaBase extends StatelessWidget {
+class TelaBase extends StatefulWidget {
+  @override
+  _TelaBaseState createState() => _TelaBaseState();
+}
+
+class _TelaBaseState extends State<TelaBase> {
   @override
   final PageController pageController = PageController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  }
 
   Widget build(BuildContext context) {
     return Provider<PageManager>(
@@ -25,12 +40,7 @@ class TelaBase extends StatelessWidget {
               children: <Widget>[
                 TelaHome(),
                 TelaProdutos(),
-                Scaffold(
-                  drawer: CustomDrawer(),
-                  appBar: AppBar(
-                    title: const Text('Home3'),
-                  ),
-                ),
+                TelaPedidos(),
                 Scaffold(
                   drawer: CustomDrawer(),
                   appBar: AppBar(
@@ -39,12 +49,7 @@ class TelaBase extends StatelessWidget {
                 ),
                 if (userManager.adminEnabled) ...[
                   TelaAdminUsers(),
-                  Scaffold(
-                    drawer: CustomDrawer(),
-                    appBar: AppBar(
-                      title: const Text('Pedidos'),
-                    ),
-                  ),
+                  TelaPedidosAdmin(),
                 ]
               ],
             );

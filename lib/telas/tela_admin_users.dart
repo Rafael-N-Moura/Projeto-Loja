@@ -1,7 +1,9 @@
 import 'package:alphabet_list_scroll_view/alphabet_list_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_budega/componentes/drawer/custom_drawer.dart';
+import 'package:projeto_budega/models/admin_orders_manager.dart';
 import 'package:projeto_budega/models/admin_users_manager.dart';
+import 'package:projeto_budega/models/page_manager.dart';
 import 'package:provider/provider.dart';
 
 class TelaAdminUsers extends StatelessWidget {
@@ -29,6 +31,12 @@ class TelaAdminUsers extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
+                onTap: () {
+                  context
+                      .read<AdminOrdersManager>()
+                      .setUserFilter(adminUsersManager.users[index]);
+                  context.read<PageManager>().setPage(5);
+                },
               );
               //tentei pegar outro emulador mais bonito mas o computador n aguentou, tem que ser esse Nexus de 1904 mesmo
             },
