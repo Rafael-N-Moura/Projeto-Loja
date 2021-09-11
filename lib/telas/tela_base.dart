@@ -7,6 +7,7 @@ import 'package:projeto_budega/telas/tela_admin_users.dart';
 import 'package:projeto_budega/telas/tela_cadastro.dart';
 import 'package:projeto_budega/telas/tela_home.dart';
 import 'package:projeto_budega/telas/tela_login.dart';
+import 'package:projeto_budega/telas/tela_lojas.dart';
 import 'package:projeto_budega/telas/tela_pedidos.dart';
 import 'package:projeto_budega/telas/tela_pedidos_admin.dart';
 import 'package:projeto_budega/telas/tela_produtos.dart';
@@ -41,12 +42,7 @@ class _TelaBaseState extends State<TelaBase> {
                 TelaHome(),
                 TelaProdutos(),
                 TelaPedidos(),
-                Scaffold(
-                  drawer: CustomDrawer(),
-                  appBar: AppBar(
-                    title: const Text('Home4'),
-                  ),
-                ),
+                TelaLojas(),
                 if (userManager.adminEnabled) ...[
                   TelaAdminUsers(),
                   TelaPedidosAdmin(),
