@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:projeto_budega/models/address.dart';
 import 'package:projeto_budega/models/cart_manager.dart';
 import 'package:projeto_budega/models/cart_product.dart';
@@ -98,9 +99,28 @@ class Order {
         : null;
   }
 
-  void cancel() {
+  void cancel() async {
     status = Status.canceled;
     firestoreRef.update({'status': status.index});
+    for (CartProduct item in items) {
+      // final ref = firestore.doc('products/${item.productId}');
+      // final doc = await firestore.collection('products').doc(item.productId).get(ref);
+      //  firestore.collection('products').doc(item.productId).update(
+      //    {'stock': }
+      //  );
+      final ref = firestore.doc('products/${item.productId}');
+
+      try {
+        final result = await firestore.runTransaction((tx) async {
+          final doc = await tx.get(ref);
+          final stock = doc.data()['stock'] as int;
+          await tx.update(ref, {'stock': stock + item.quantity});
+        });
+      } catch (e) {
+        debugPrint(e.toString());
+        // return Future.error('Falha ao gerar número do pedido');
+      }
+    }
   }
 
   @override

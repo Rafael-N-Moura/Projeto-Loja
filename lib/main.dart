@@ -10,6 +10,7 @@ import 'package:projeto_budega/models/orders_manager.dart';
 import 'package:projeto_budega/models/page_manager.dart';
 import 'package:projeto_budega/models/product.dart';
 import 'package:projeto_budega/models/product_manager.dart';
+import 'package:projeto_budega/models/store_manager.dart';
 import 'package:projeto_budega/models/user_manager.dart';
 import 'package:projeto_budega/services/cepaberto_service.dart';
 import 'package:projeto_budega/telas/tela_base.dart';
@@ -82,6 +83,9 @@ class _AppState extends State<App> {
         ChangeNotifierProvider(
           create: (_) => HomeManager(),
           lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => StoresManager(),
         ),
         ChangeNotifierProxyProvider<UserManager, CartManager>(
           create: (_) => CartManager(),
