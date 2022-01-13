@@ -8,7 +8,8 @@ class Address {
       this.city,
       this.state,
       this.lat,
-      this.long});
+      this.long,
+      this.telefone});
 
   String street;
   String number;
@@ -17,6 +18,7 @@ class Address {
   String zipCode;
   String city;
   String state;
+  String telefone;
 
   double lat;
   double long;
@@ -31,6 +33,7 @@ class Address {
     state = map['state'] as String;
     lat = map['lat'] as double;
     long = map['long'] as double;
+    telefone = map['telefone'] as String;
   }
 
   Map<String, dynamic> toMap() {
@@ -44,6 +47,7 @@ class Address {
       'state': state,
       'lat': lat,
       'long': long,
+      'telefone': telefone,
     };
   }
 }

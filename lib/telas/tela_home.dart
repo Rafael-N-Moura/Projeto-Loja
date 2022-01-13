@@ -30,7 +30,7 @@ class TelaHome extends StatelessWidget {
                 elevation: 0,
                 backgroundColor: Colors.transparent,
                 flexibleSpace: const FlexibleSpaceBar(
-                  title: Text('Budega Online'),
+                  title: Text('Budega do Nonatim'),
                   centerTitle: true,
                 ),
                 actions: <Widget>[

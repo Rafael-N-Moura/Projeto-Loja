@@ -1,3 +1,4 @@
+import 'package:alphabet_list_scroll_view/alphabet_list_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_budega/componentes/drawer/custom_drawer.dart';
 import 'package:projeto_budega/componentes/products/product_list_tile.dart';
@@ -85,9 +86,10 @@ class TelaProdutos extends StatelessWidget {
           )
         ],
       ),
-      body: Consumer<ProductManager>(
+       body: Consumer<ProductManager>(
         builder: (_, productManager, __) {
           final filtererdProducts = productManager.filteredProducts;
+          filtererdProducts.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
           return ListView.builder(
             // padding: const EdgeInsets.all(4),
             itemCount: filtererdProducts.length,

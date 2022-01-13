@@ -84,7 +84,7 @@ class OrderTile extends StatelessWidget {
                     onPressed: () {
                       showDialog(
                           context: context,
-                          builder: (_) => ExportAddressDialog(order.address));
+                          builder: (_) => ExportAddressDialog(order));
                     },
                     textColor: primaryColor,
                     child: const Text('Endereço'),

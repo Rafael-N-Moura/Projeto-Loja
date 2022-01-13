@@ -25,8 +25,13 @@ import 'package:projeto_budega/telas/tela_produto.dart';
 import 'package:projeto_budega/telas/tela_selecionar_produto.dart';
 import 'package:provider/provider.dart';
 
+
 Future<void> main() async {
   Provider.debugCheckInvalidValueType = null;
+
+  
+
+  
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

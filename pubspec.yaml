@@ -55,6 +55,12 @@ dependencies:
   url_launcher: ^6.0.5
   map_launcher: ^2.1.1
   flutter_svg: ^0.22.0
+  cloud_functions: 0.6.0
+  firebase_messaging: 6.0.16
+  another_flushbar: ^1.10.24
+
+
+  
 
 dev_dependencies:
   flutter_test:

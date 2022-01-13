@@ -35,6 +35,10 @@ class UserManager extends ChangeNotifier {
     setLoading(false);
   }
 
+  void forgottenPassword(String userEmail) {
+    auth.sendPasswordResetEmail(email: userEmail);
+  }
+
   //cadastrar
   Future<void> signUp(
       {AppUser user, Function onFail, Function onSucess}) async {
@@ -47,6 +51,7 @@ class UserManager extends ChangeNotifier {
       user.id = result.user.uid;
       this.user = user;
       await user.saveData();
+      user.saveToken();
 
       onSucess();
     } on FirebaseAuthException catch (e) {
@@ -86,6 +91,8 @@ class UserManager extends ChangeNotifier {
           await firestore.collection('users').doc(currentUser.uid).get();
       user = AppUser.fromDocument(docUser);
 
+      user.saveToken();
+
       final docAdmin = await firestore.collection('admins').doc(user.id).get();
       if (docAdmin.exists) {
         user.admin = true;
@@ -107,6 +114,9 @@ class UserManager extends ChangeNotifier {
 
     final result = await FacebookLogin().logIn(['email', 'public_profile']);
 
+    print(result.errorMessage.toString());
+    print(result.status.toString());
+
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
         final credential =
@@ -123,6 +133,8 @@ class UserManager extends ChangeNotifier {
               email: firebaseUser.email);
 
           await user.saveData();
+
+          user.saveToken();
 
           onSuccess();
         }

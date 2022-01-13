@@ -50,7 +50,7 @@ class TelaCheckout extends StatelessWidget {
               key: formKey,
               child: ListView(
                 children: <Widget>[
-                  CreditCardWidget(),
+                  //CreditCardWidget(),
                   PriceCard(
                     buttonText: 'Finalizar Pedido',
                     onPressed: () {

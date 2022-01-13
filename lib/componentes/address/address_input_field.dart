@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projeto_budega/models/address.dart';
@@ -73,7 +74,7 @@ class AddressInputField extends StatelessWidget {
             decoration: const InputDecoration(
               isDense: true,
               labelText: 'Bairro',
-              hintText: 'Guanabara',
+              hintText: 'Centro',
             ),
             validator: emptyValidator,
             onSaved: (t) => address.district = t,
@@ -88,7 +89,7 @@ class AddressInputField extends StatelessWidget {
                   decoration: const InputDecoration(
                     isDense: true,
                     labelText: 'Cidade',
-                    hintText: 'Campinas',
+                    hintText: 'Caxias',
                   ),
                   validator: emptyValidator,
                   onSaved: (t) => address.city = t,
@@ -106,7 +107,7 @@ class AddressInputField extends StatelessWidget {
                   decoration: const InputDecoration(
                     isDense: true,
                     labelText: 'UF',
-                    hintText: 'SP',
+                    hintText: 'MA',
                     counterText: '',
                   ),
                   maxLength: 2,
@@ -122,6 +123,27 @@ class AddressInputField extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          TextFormField(
+            enabled: !cartManager.loading,
+            initialValue: address.telefone,
+            decoration: const InputDecoration(
+              isDense: true,
+              labelText: 'Telefone',
+              hintText: '(99) 94002-8922',
+            ),
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              TelefoneInputFormatter(),
+            ],
+            keyboardType: TextInputType.number,
+            validator: (telefone) {
+              if (telefone.isEmpty)
+                return 'Campo obrigatório';
+              else if (telefone.length != 15) return 'Telefone Inválido';
+              return null;
+            },
+            onSaved: (t) => address.telefone = t,
           ),
           const SizedBox(
             height: 8,
@@ -161,7 +183,7 @@ class AddressInputField extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 16),
         child:
             Text('${address.street}, ${address.number}\n${address.district}\n'
-                '${address.city} - ${address.state}'),
+                '${address.city} - ${address.state}\n${address.telefone}'),
       );
     else
       return Container();

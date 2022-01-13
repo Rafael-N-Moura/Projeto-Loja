@@ -84,7 +84,15 @@ class TelaLogin extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: FlatButton(
                         padding: EdgeInsets.zero,
-                        onPressed: () {},
+                        onPressed: () {
+                          userManager.forgottenPassword(emailController.text);
+                          scaffoldKey.currentState.showSnackBar(
+                            SnackBar(
+                              content: Text('Por favor cheque seu E-mail'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        },
                         child: Text("Esqueci minha senha"),
                       ),
                     ),

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:projeto_budega/models/address.dart';
 
 class AppUser {
@@ -24,8 +27,21 @@ class AppUser {
 
   CollectionReference get cartReference => firestoreRef.collection('cart');
 
+  CollectionReference get tokensReference =>
+      firestoreRef.collection('tokens');
+
+
   Future<void> saveData() async {
     await FirebaseFirestore.instance.collection('users').doc(id).set(toMap());
+  }
+
+  Future<void> saveToken() async {
+    final token = await FirebaseMessaging().getToken();
+    await tokensReference.doc(token).set({
+      'token': token,
+      'updatedAt': FieldValue.serverTimestamp(),
+      'platform': Platform.operatingSystem,
+    });
   }
 
   Map<String, dynamic> toMap() {
@@ -40,4 +56,5 @@ class AppUser {
     this.address = address;
     saveData();
   }
+
 }

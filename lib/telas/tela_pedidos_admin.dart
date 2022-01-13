@@ -107,20 +107,24 @@ class _TelaPedidosAdminState extends State<TelaPedidosAdmin> {
                   ),
                 ),
                 Expanded(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: Status.values.map((s) {
-                    return CheckboxListTile(
-                      activeColor: Theme.of(context).primaryColor,
-                      value: ordersManager.statusFilter.contains(s),
-                      onChanged: (v) {
-                        ordersManager.setStatusFilter(status: s, enabled: v);
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: Status.values.map(
+                      (s) {
+                        return CheckboxListTile(
+                          activeColor: Theme.of(context).primaryColor,
+                          value: ordersManager.statusFilter.contains(s),
+                          onChanged: (v) {
+                            ordersManager.setStatusFilter(
+                                status: s, enabled: v);
+                          },
+                          dense: true,
+                          title: Text(Order.getStatusText(s)),
+                        );
                       },
-                      dense: true,
-                      title: Text(Order.getStatusText(s)),
-                    );
-                  }).toList(),
-                ))
+                    ).toList(),
+                  ),
+                )
               ],
             ),
           );

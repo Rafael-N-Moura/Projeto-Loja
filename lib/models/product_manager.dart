@@ -13,6 +13,7 @@ class ProductManager extends ChangeNotifier {
   ProductManager() {
     _loadAllProducts();
   }
+
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<Product> get filteredProducts {
     final List<Product> filteredProducts = [];
